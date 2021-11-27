@@ -1,0 +1,9 @@
+{
+  "name": "chat",
+  "packageManager": "yarn@3.1.0",
+  "private": true,
+  "workspaces": [
+    "server",
+    "web"
+  ]
+}
