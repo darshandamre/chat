@@ -5,8 +5,13 @@ import GraphiQL from "graphiql";
 import { createGraphiQLFetcher } from "@graphiql/toolkit";
 import "graphiql/graphiql.min.css";
 
+const url = "http://localhost:4000/graphql";
+
+const subscriptionUrl = "ws://localhost:4000/graphql";
+
 const fetcher = createGraphiQLFetcher({
-  url: "http://localhost:4000/graphql"
+  url,
+  subscriptionUrl
 });
 
 ReactDOM.render(
