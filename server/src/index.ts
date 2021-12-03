@@ -18,6 +18,8 @@ import { HelloResolver } from "./resolvers/hello";
 // import { execute, subscribe } from "graphql";
 import { useServer } from "graphql-ws/lib/use/ws";
 import cors from "cors";
+import { ChatResolver } from "./resolvers/chat";
+import { Chat } from "./entities/Chat";
 
 const main = async () => {
   const conn = await createConnection({
@@ -28,7 +30,7 @@ const main = async () => {
     database: "chat",
     logging: true,
     synchronize: true,
-    entities: [User]
+    entities: [User, Chat]
   });
 
   const app = express();
@@ -41,7 +43,7 @@ const main = async () => {
   );
 
   const schema = await buildSchema({
-    resolvers: [HelloResolver],
+    resolvers: [HelloResolver, ChatResolver],
     validate: false
   });
 
