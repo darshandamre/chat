@@ -20,6 +20,7 @@ import { useServer } from "graphql-ws/lib/use/ws";
 import cors from "cors";
 import { ChatResolver } from "./resolvers/chat";
 import { Chat } from "./entities/Chat";
+import { UserResolver } from "./resolvers/user";
 
 const main = async () => {
   const conn = await createConnection({
@@ -43,7 +44,7 @@ const main = async () => {
   );
 
   const schema = await buildSchema({
-    resolvers: [HelloResolver, ChatResolver],
+    resolvers: [HelloResolver, ChatResolver, UserResolver],
     validate: false
   });
 
