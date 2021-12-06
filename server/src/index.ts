@@ -1,4 +1,6 @@
 import "reflect-metadata";
+import dotenv from "dotenv";
+dotenv.config();
 import {
   // ApolloServerPluginDrainHttpServer,
   ApolloServerPluginLandingPageGraphQLPlayground
@@ -21,6 +23,10 @@ import cors from "cors";
 import { ChatResolver } from "./resolvers/chat";
 import { Chat } from "./entities/Chat";
 import { UserResolver } from "./resolvers/user";
+import Redis from "ioredis";
+import session from "express-session";
+import connectRedis from "connect-redis";
+import { COOKIE_NAME, __prod__ } from "./constants";
 
 const main = async () => {
   const conn = await createConnection({
@@ -37,9 +43,29 @@ const main = async () => {
   const app = express();
   // const httpServer = createServer(app);
 
+  let RedisStore = connectRedis(session);
+  let redis = new Redis();
+
   app.use(
     cors({
-      origin: ["http://localhost:3000", "http://localhost:3003"]
+      origin: "http://localhost:3003",
+      credentials: true
+    })
+  );
+
+  app.use(
+    session({
+      name: COOKIE_NAME,
+      store: new RedisStore({ client: redis, disableTouch: true }),
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 365 * 10, //10 years
+        httpOnly: true,
+        secure: __prod__, // cookie works only in https
+        sameSite: "lax"
+      },
+      saveUninitialized: false,
+      secret: process.env.COOKIE_SECRET!,
+      resave: false
     })
   );
 

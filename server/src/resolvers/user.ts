@@ -1,14 +1,17 @@
 import {
   Arg,
+  Ctx,
   Field,
   InputType,
   Mutation,
   ObjectType,
+  Query,
   Resolver
 } from "type-graphql";
 import { User } from "../entities/User";
 import argon2 from "argon2";
 import { validateRegister } from "../utils/validateRegister";
+import { MyContext } from "../types";
 
 @InputType()
 export class UserRegisterInput {
@@ -39,9 +42,21 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
+  @Query(() => User, { nullable: true })
+  async me(@Ctx() { req }: MyContext) {
+    // not logged in
+    if (!req.session.userId) {
+      return null;
+    }
+
+    const user = await User.findOne({ id: req.session.userId });
+    return user;
+  }
+
   @Mutation(() => UserResponse)
   async register(
-    @Arg("options") options: UserRegisterInput
+    @Arg("options") options: UserRegisterInput,
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const errors = validateRegister(options);
     if (errors) {
@@ -50,7 +65,7 @@ export class UserResolver {
 
     const hashedPassword = await argon2.hash(options.password);
 
-    let user;
+    let user!: User;
     try {
       user = await User.create({
         email: options.email,
@@ -84,13 +99,17 @@ export class UserResolver {
       }
     }
 
+    // store a cookie
+    req.session.userId = user.id;
+
     return { user };
   }
 
   @Mutation(() => UserResponse)
   async login(
     @Arg("usernameOrEmail") usernameOrEmail: string,
-    @Arg("password") password: string
+    @Arg("password") password: string,
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const user = await User.findOne(
       usernameOrEmail.includes("@")
@@ -121,6 +140,9 @@ export class UserResolver {
         ]
       };
     }
+
+    // store a cookie
+    req.session.userId = user.id;
 
     return { user };
   }
