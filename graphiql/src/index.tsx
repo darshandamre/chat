@@ -16,6 +16,6 @@ const fetcher = createGraphiQLFetcher({
 });
 
 ReactDOM.render(
-  <GraphiQL fetcher={fetcher} editorTheme={"dracula"} />,
+  <GraphiQL fetcher={fetcher} editorTheme={"isotope"} />,
   document.getElementById("graphiql")
 );
