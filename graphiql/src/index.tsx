@@ -10,7 +10,9 @@ const subscriptionUrl = "ws://localhost:4000/graphql";
 
 const fetcher = createGraphiQLFetcher({
   url,
-  subscriptionUrl
+  subscriptionUrl,
+  fetch: (requestUrl, requestOptions) =>
+    fetch(requestUrl, { ...requestOptions, credentials: "include" })
 });
 
 ReactDOM.render(
