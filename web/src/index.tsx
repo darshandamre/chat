@@ -1,10 +1,12 @@
-import * as React from "react";
+// import * as React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import App from "./App";
 import theme from "./theme";
+import { client } from "./createApolloClient";
+import { gql } from "@apollo/client";
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
@@ -16,3 +18,17 @@ ReactDOM.render(
   </ThemeProvider>,
   document.querySelector("#root")
 );
+
+client
+  .query({
+    query: gql`
+      query Me {
+        me {
+          id
+          username
+          email
+        }
+      }
+    `
+  })
+  .then(result => console.log(result));
