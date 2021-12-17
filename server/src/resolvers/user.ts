@@ -80,7 +80,7 @@ export class UserResolver {
             errors: [
               {
                 field: "email",
-                message: "email already taken"
+                message: "email already in use"
               }
             ]
           };
@@ -91,7 +91,7 @@ export class UserResolver {
             errors: [
               {
                 field: "username",
-                message: "usename already taken"
+                message: "username already taken"
               }
             ]
           };
