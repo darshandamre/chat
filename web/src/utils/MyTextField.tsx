@@ -1,6 +1,7 @@
 import React from "react";
 import { FieldHookConfig, useField } from "formik";
 import TextField from "@mui/material/TextField";
+import "../style.css";
 
 type MyTextFieldProps = FieldHookConfig<{}> & {
   label: string;
@@ -15,6 +16,7 @@ export const MyTextField: React.FC<MyTextFieldProps> = ({
 
   return (
     <TextField
+      className="inputRounded"
       sx={{
         my: 1
       }}

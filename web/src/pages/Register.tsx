@@ -56,16 +56,13 @@ const Register: React.FC = () => {
               <MyTextField name="password" label="password" />
 
               <Button
-                sx={{ width: "100%", my: 1 }}
+                sx={{ width: "100%", my: 1, borderRadius: "16px" }}
                 size="large"
                 type="submit"
                 variant="contained"
                 disabled={isSubmitting}>
                 Sign up
               </Button>
-
-              <pre>{JSON.stringify(values, null, 2)}</pre>
-              <pre>{JSON.stringify(errors, null, 2)}</pre>
             </Form>
           )}
         </Formik>
