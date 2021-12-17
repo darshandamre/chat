@@ -6,29 +6,17 @@ import { ThemeProvider } from "@mui/material/styles";
 import App from "./App";
 import theme from "./theme";
 import { client } from "./createApolloClient";
-import { gql } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
-    <BrowserRouter>
-      {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-      <CssBaseline />
-      <App />
-    </BrowserRouter>
-  </ThemeProvider>,
+  <ApolloProvider client={client}>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+        <CssBaseline />
+        <App />
+      </BrowserRouter>
+    </ThemeProvider>
+  </ApolloProvider>,
   document.querySelector("#root")
 );
-
-client
-  .query({
-    query: gql`
-      query Me {
-        me {
-          id
-          username
-          email
-        }
-      }
-    `
-  })
-  .then(result => console.log(result));

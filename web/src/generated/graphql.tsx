@@ -114,6 +114,11 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, username: string, email: string } | null | undefined };
 
+export type HelloOkaySubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type HelloOkaySubscription = { __typename?: 'Subscription', subsHello: { __typename?: 'HelloOkay', hello: string } };
+
 
 export const MeDocument = gql`
     query Me {
@@ -151,3 +156,32 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const HelloOkayDocument = gql`
+    subscription HelloOkay {
+  subsHello {
+    hello
+  }
+}
+    `;
+
+/**
+ * __useHelloOkaySubscription__
+ *
+ * To run a query within a React component, call `useHelloOkaySubscription` and pass it any options that fit your needs.
+ * When your component renders, `useHelloOkaySubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHelloOkaySubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useHelloOkaySubscription(baseOptions?: Apollo.SubscriptionHookOptions<HelloOkaySubscription, HelloOkaySubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<HelloOkaySubscription, HelloOkaySubscriptionVariables>(HelloOkayDocument, options);
+      }
+export type HelloOkaySubscriptionHookResult = ReturnType<typeof useHelloOkaySubscription>;
+export type HelloOkaySubscriptionResult = Apollo.SubscriptionResult<HelloOkaySubscription>;
