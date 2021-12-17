@@ -6,16 +6,21 @@ import { Form, Formik } from "formik";
 import { MyTextField } from "../utils/MyTextField";
 import Button from "@mui/material/Button";
 import * as yup from "yup";
+import { useLoginMutation } from "src/generated/graphql";
+import { toErrorMap } from "../utils/toErrorMap";
 
-interface LoginProps {}
+// interface LoginProps {}
 
-const Login: React.FC<LoginProps> = ({}) => {
-  const validationSchema = yup.object({
-    usernameOrEmail: yup
-      .string()
-      .required("username or email is a required field"),
-    password: yup.string().required().min(3)
-  });
+const validationSchema = yup.object({
+  usernameOrEmail: yup
+    .string()
+    .required("username or email is a required field"),
+  password: yup.string().required().min(3)
+});
+
+const Login: React.FC = () => {
+  const [login] = useLoginMutation();
+
   return (
     <>
       <NavBar />
@@ -33,10 +38,24 @@ const Login: React.FC<LoginProps> = ({}) => {
             password: ""
           }}
           validationSchema={validationSchema}
-          onSubmit={(data, { setSubmitting }) => {
+          onSubmit={async (
+            { usernameOrEmail, password },
+            { setSubmitting, setErrors }
+          ) => {
             setSubmitting(true);
             // make async call
-            console.log("submit: ", data);
+            const response = await login({
+              variables: {
+                usernameOrEmail,
+                password
+              }
+            });
+            if (response.data?.login.errors) {
+              setErrors(toErrorMap(response.data.login.errors));
+            } else if (response.data?.login.user) {
+              console.log("success");
+            }
+            console.log("response: ", response);
             setSubmitting(false);
           }}>
           {({ values, errors, isSubmitting }) => (

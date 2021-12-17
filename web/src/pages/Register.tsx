@@ -6,6 +6,8 @@ import { MyTextField } from "../utils/MyTextField";
 import Typography from "@mui/material/Typography";
 import * as yup from "yup";
 import Button from "@mui/material/Button";
+import { useRegisterMutation } from "../generated/graphql";
+import { toErrorMap } from "../utils/toErrorMap";
 
 // interface RegisterProps {}
 
@@ -16,6 +18,7 @@ const validationSchema = yup.object({
 });
 
 const Register: React.FC = () => {
+  const [register] = useRegisterMutation();
   return (
     <>
       <NavBar />
@@ -34,10 +37,16 @@ const Register: React.FC = () => {
             password: ""
           }}
           validationSchema={validationSchema}
-          onSubmit={(data, { setSubmitting }) => {
+          onSubmit={async (values, { setSubmitting, setErrors }) => {
             setSubmitting(true);
             // make async call
-            console.log("submit: ", data);
+            const response = await register({ variables: { options: values } });
+            if (response.data?.register.errors) {
+              setErrors(toErrorMap(response.data.register.errors));
+            } else if (response.data?.register.user) {
+              console.log("success");
+            }
+            console.log("response: ", response);
             setSubmitting(false);
           }}>
           {({ values, errors, isSubmitting }) => (
