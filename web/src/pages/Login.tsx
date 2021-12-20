@@ -1,15 +1,14 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Form, Formik } from "formik";
+import * as yup from "yup";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import React from "react";
-import NavBar from "../Components/NavBar";
-import { Form, Formik } from "formik";
-import { MyTextField } from "../utils/MyTextField";
 import Button from "@mui/material/Button";
-import * as yup from "yup";
-import { useLoginMutation } from "src/generated/graphql";
+import NavBar from "../Components/NavBar";
+import { MyTextField } from "../utils/MyTextField";
 import { toErrorMap } from "../utils/toErrorMap";
-
-// interface LoginProps {}
+import { MeDocument, MeQuery, useLoginMutation } from "../generated/graphql";
 
 const validationSchema = yup.object({
   usernameOrEmail: yup
@@ -19,7 +18,18 @@ const validationSchema = yup.object({
 });
 
 const Login: React.FC = () => {
-  const [login] = useLoginMutation();
+  const navigate = useNavigate();
+  const [login] = useLoginMutation({
+    update: (cache, { data }) => {
+      cache.writeQuery<MeQuery>({
+        query: MeDocument,
+        data: {
+          __typename: "Query",
+          me: data?.login.user
+        }
+      });
+    }
+  });
 
   return (
     <>
@@ -53,9 +63,8 @@ const Login: React.FC = () => {
             if (response.data?.login.errors) {
               setErrors(toErrorMap(response.data.login.errors));
             } else if (response.data?.login.user) {
-              console.log("success");
+              navigate("/");
             }
-            console.log("response: ", response);
             setSubmitting(false);
           }}>
           {({ isSubmitting }) => (

@@ -1,15 +1,14 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { useNavigate } from "react-router-dom";
 import { Form, Formik } from "formik";
+import * as yup from "yup";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import NavBar from "../Components/NavBar";
 import { MyTextField } from "../utils/MyTextField";
-import Typography from "@mui/material/Typography";
-import * as yup from "yup";
-import Button from "@mui/material/Button";
-import { useRegisterMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
-
-// interface RegisterProps {}
+import { useRegisterMutation, MeDocument, MeQuery } from "../generated/graphql";
 
 const validationSchema = yup.object({
   email: yup.string().required().email(),
@@ -18,7 +17,18 @@ const validationSchema = yup.object({
 });
 
 const Register: React.FC = () => {
-  const [register] = useRegisterMutation();
+  const navigate = useNavigate();
+  const [register] = useRegisterMutation({
+    update: (cache, { data }) => {
+      cache.writeQuery<MeQuery>({
+        query: MeDocument,
+        data: {
+          __typename: "Query",
+          me: data?.register.user
+        }
+      });
+    }
+  });
   return (
     <>
       <NavBar />
@@ -44,9 +54,8 @@ const Register: React.FC = () => {
             if (response.data?.register.errors) {
               setErrors(toErrorMap(response.data.register.errors));
             } else if (response.data?.register.user) {
-              console.log("success");
+              navigate("/");
             }
-            console.log("response: ", response);
             setSubmitting(false);
           }}>
           {({ isSubmitting }) => (
