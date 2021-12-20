@@ -49,7 +49,7 @@ const Register: React.FC = () => {
             console.log("response: ", response);
             setSubmitting(false);
           }}>
-          {({ values, errors, isSubmitting }) => (
+          {({ isSubmitting }) => (
             <Form>
               <MyTextField name="email" label="email" />
               <MyTextField name="username" label="username" />

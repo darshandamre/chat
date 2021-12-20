@@ -58,7 +58,7 @@ const Login: React.FC = () => {
             console.log("response: ", response);
             setSubmitting(false);
           }}>
-          {({ values, errors, isSubmitting }) => (
+          {({ isSubmitting }) => (
             <Form>
               <MyTextField name="usernameOrEmail" label="username or email" />
               <MyTextField name="password" label="password" />
