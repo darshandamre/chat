@@ -7,11 +7,11 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
-import { client } from "../createApolloClient";
+import { client } from "../utils/createApolloClient";
 
 interface NavBarProps {}
 
-const NavBar: React.FC<NavBarProps> = ({}) => {
+const NavBar: React.FC<NavBarProps> = () => {
   const navigate = useNavigate();
   const { data, loading } = useMeQuery();
   const [logout, { loading: logoutFetching }] = useLogoutMutation();
@@ -60,7 +60,7 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
   }
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box>
       <AppBar position="static">
         <Toolbar>
           <Typography

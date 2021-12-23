@@ -1,12 +1,12 @@
-// import * as React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
+import { ApolloProvider } from "@apollo/client";
+import { client } from "./utils/createApolloClient";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import App from "./App";
 import theme from "./theme";
-import { client } from "./createApolloClient";
-import { ApolloProvider } from "@apollo/client";
+import "./style.css";
 
 ReactDOM.render(
   <ApolloProvider client={client}>
