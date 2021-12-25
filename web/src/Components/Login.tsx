@@ -6,7 +6,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import NavBar from "../Components/NavBar";
-import { MyTextField } from "../utils/MyTextField";
+import { MyTextField } from "./MyTextField";
+import { MyPasswordField } from "./MyPasswordField";
 import { toErrorMap } from "../utils/toErrorMap";
 import { MeDocument, MeQuery, useLoginMutation } from "../generated/graphql";
 
@@ -70,7 +71,7 @@ const Login: React.FC = () => {
           {({ isSubmitting }) => (
             <Form>
               <MyTextField name="usernameOrEmail" label="username or email" />
-              <MyTextField name="password" label="password" />
+              <MyPasswordField name="password" />
 
               <Button
                 sx={{ width: "100%", my: 1, borderRadius: "16px" }}

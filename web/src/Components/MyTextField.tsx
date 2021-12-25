@@ -8,6 +8,7 @@ type MyTextFieldProps = FieldHookConfig<{}> & {
 
 export const MyTextField: React.FC<MyTextFieldProps> = ({
   label,
+
   ...props
 }) => {
   const [field, meta] = useField<{}>(props);

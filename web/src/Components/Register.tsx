@@ -6,7 +6,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import NavBar from "./NavBar";
-import { MyTextField } from "../utils/MyTextField";
+import { MyTextField } from "./MyTextField";
+import { MyPasswordField } from "./MyPasswordField";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useRegisterMutation, MeDocument, MeQuery } from "../generated/graphql";
 
@@ -62,7 +63,7 @@ const Register: React.FC = () => {
             <Form>
               <MyTextField name="email" label="email" />
               <MyTextField name="username" label="username" />
-              <MyTextField name="password" label="password" />
+              <MyPasswordField name="password" />
 
               <Button
                 sx={{ width: "100%", my: 1, borderRadius: "16px" }}

@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 
 const App: React.FC = () => {
   return (
-    <Box sx={{ minHeight: "100vh" }}>
+    <Box>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
