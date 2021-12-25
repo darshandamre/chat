@@ -1,7 +1,7 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import Inbox from "../Components/Inbox";
-import NavBar from "../Components/NavBar";
+import Inbox from "./Inbox";
+import NavBar from "./NavBar";
 
 const Home: React.FC = () => {
   return (

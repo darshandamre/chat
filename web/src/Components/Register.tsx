@@ -5,7 +5,7 @@ import * as yup from "yup";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import NavBar from "../Components/NavBar";
+import NavBar from "./NavBar";
 import { MyTextField } from "../utils/MyTextField";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useRegisterMutation, MeDocument, MeQuery } from "../generated/graphql";
