@@ -8,7 +8,7 @@ const InboxList: React.FC<InboxListProps> = () => {
   return (
     <Box
       sx={{
-        width: "30%",
+        width: "35%",
         minWidth: "230px",
         borderRight: 1,
         borderColor: "grey.800", // keep border color after border right so that it doesn't get overwritten
@@ -24,9 +24,6 @@ const InboxList: React.FC<InboxListProps> = () => {
           width: "100%",
           position: "absolute"
         }}>
-        <Inbox />
-        <Inbox />
-        <Inbox />
         <Inbox />
       </Box>
     </Box>
