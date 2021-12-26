@@ -1,7 +1,8 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import Inbox from "./Inbox";
 import NavBar from "./NavBar";
+import InboxList from "./InboxList";
+import Chats from "./Chats";
 
 const Home: React.FC = () => {
   return (
@@ -13,7 +14,8 @@ const Home: React.FC = () => {
       }}>
       <NavBar />
       <Box sx={{ flexGrow: 1, display: "flex" }}>
-        <Inbox />
+        <InboxList />
+        <Chats />
       </Box>
     </Box>
   );
