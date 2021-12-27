@@ -1,31 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import { styled } from "@mui/material/styles";
-import { grey } from "@mui/material/colors";
 import Message from "./Message";
+import InputMessageField from "./InputMessageField";
 
 interface ChatsProps {}
-
-const InputMessageField = styled(TextField)({
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: grey[800],
-      borderRadius: "2rem"
-    },
-    "&:hover fieldset": {
-      borderColor: "#556cd6" //primary.main
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#556cd6" //primary.main
-    },
-    "& textarea": {
-      // change padding to change the inner space between border and text in this input field
-      paddingLeft: "1em",
-      paddingRight: "1em"
-    }
-  }
-});
 
 const Chats: React.FC<ChatsProps> = () => {
   const chatContainer = useRef<HTMLElement>();
@@ -75,12 +53,7 @@ const Chats: React.FC<ChatsProps> = () => {
           <Message />
         </Box>
       </Box>
-      <InputMessageField
-        fullWidth
-        placeholder="Message..."
-        multiline
-        maxRows={5}
-      />
+      <InputMessageField />
     </Box>
   );
 };
