@@ -4,36 +4,40 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from "typeorm";
-import { Chat } from "./Chat";
-import { Inbox } from "./Inbox";
+import { User } from "./User";
 
 @ObjectType()
 @Entity()
-export class User extends BaseEntity {
+export class Inbox extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id: number;
 
   @Field()
-  @Column({ unique: true })
-  username: string;
+  @Column()
+  lastMessage: string;
 
   @Field()
-  @Column({ unique: true })
-  email: string;
+  @Column({ default: 0 })
+  unseenNum: number;
 
+  @Field()
   @Column()
-  password: string;
+  ownerId: number;
 
-  @OneToMany(() => Chat, chat => chat.sender)
-  chats: Chat[];
+  @ManyToOne(() => User, user => user.inboxes)
+  owner: User;
 
-  @OneToMany(() => Inbox, inbox => inbox.owner)
-  inboxes: Inbox[];
+  @Field()
+  @Column()
+  senderId: number;
+
+  @ManyToOne(() => User)
+  sender: User;
 
   @Field(() => String)
   @CreateDateColumn()

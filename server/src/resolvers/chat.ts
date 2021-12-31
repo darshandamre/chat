@@ -1,5 +1,14 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware
+} from "type-graphql";
 import { Chat } from "../entities/Chat";
+import { isAuth } from "../middleware/isAuth";
+import { MyContext } from "../types";
 
 @Resolver()
 export class ChatResolver {
@@ -16,8 +25,12 @@ export class ChatResolver {
 
   // create
   @Mutation(() => Chat)
-  async createMessage(@Arg("message") message: string): Promise<Chat> {
-    return await Chat.create({ message }).save();
+  @UseMiddleware(isAuth)
+  async createMessage(
+    @Arg("message") message: string,
+    @Ctx() { req }: MyContext
+  ): Promise<Chat> {
+    return await Chat.create({ message, senderId: req.session.userId }).save();
   }
 
   // update

@@ -18,9 +18,10 @@ import Redis from "ioredis";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import { COOKIE_NAME, __prod__ } from "./constants";
+import { Inbox } from "./entities/Inbox";
 
 const main = async () => {
-  const conn = await createConnection({
+  await createConnection({
     type: "postgres",
     host: "localhost",
     username: "postgres",
@@ -28,7 +29,7 @@ const main = async () => {
     database: "chat",
     logging: true,
     synchronize: true,
-    entities: [User, Chat]
+    entities: [User, Chat, Inbox]
   });
 
   const app = express();
