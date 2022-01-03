@@ -20,6 +20,8 @@ export type Chat = {
   createdAt: Scalars['String'];
   id: Scalars['Float'];
   message: Scalars['String'];
+  sender: User;
+  senderId: Scalars['Float'];
   updatedAt: Scalars['String'];
 };
 
@@ -93,7 +95,7 @@ export type User = {
   __typename?: 'User';
   createdAt: Scalars['String'];
   email: Scalars['String'];
-  id: Scalars['ID'];
+  id: Scalars['Float'];
   updatedAt: Scalars['String'];
   username: Scalars['String'];
 };
@@ -116,7 +118,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', id: string, username: string, email: string, createdAt: string, updatedAt: string } | null | undefined } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', id: number, username: string, email: string, createdAt: string, updatedAt: string } | null | undefined } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -128,12 +130,17 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', id: string, username: string, email: string, createdAt: string, updatedAt: string } | null | undefined } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', id: number, username: string, email: string, createdAt: string, updatedAt: string } | null | undefined } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, username: string, email: string } | null | undefined };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, username: string, email: string } | null | undefined };
+
+export type MessagesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MessagesQuery = { __typename?: 'Query', messages: Array<{ __typename?: 'Chat', id: number, message: string, createdAt: string, updatedAt: string, sender: { __typename?: 'User', id: number, username: string } }> };
 
 export type HelloOkaySubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -294,6 +301,47 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const MessagesDocument = gql`
+    query Messages {
+  messages {
+    id
+    message
+    sender {
+      id
+      username
+    }
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useMessagesQuery__
+ *
+ * To run a query within a React component, call `useMessagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMessagesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMessagesQuery(baseOptions?: Apollo.QueryHookOptions<MessagesQuery, MessagesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MessagesQuery, MessagesQueryVariables>(MessagesDocument, options);
+      }
+export function useMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MessagesQuery, MessagesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MessagesQuery, MessagesQueryVariables>(MessagesDocument, options);
+        }
+export type MessagesQueryHookResult = ReturnType<typeof useMessagesQuery>;
+export type MessagesLazyQueryHookResult = ReturnType<typeof useMessagesLazyQuery>;
+export type MessagesQueryResult = Apollo.QueryResult<MessagesQuery, MessagesQueryVariables>;
 export const HelloOkayDocument = gql`
     subscription HelloOkay {
   subsHello {

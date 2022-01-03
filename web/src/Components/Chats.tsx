@@ -2,10 +2,13 @@ import React, { useEffect, useRef } from "react";
 import Box from "@mui/material/Box";
 import Message from "./Message";
 import InputMessageField from "./InputMessageField";
+import { useMessagesQuery } from "../generated/graphql";
 
 interface ChatsProps {}
 
 const Chats: React.FC<ChatsProps> = () => {
+  const { data, loading } = useMessagesQuery();
+
   const chatContainer = useRef<HTMLElement>();
 
   useEffect(() => {
@@ -13,7 +16,7 @@ const Chats: React.FC<ChatsProps> = () => {
       let { scrollHeight } = chatContainer.current.children[0];
       chatContainer.current.scrollTop = scrollHeight;
     }
-  }, []);
+  });
 
   return (
     <Box
@@ -39,18 +42,20 @@ const Chats: React.FC<ChatsProps> = () => {
             // for separate scroll bar
             position: "absolute"
           }}>
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
+          {loading ? (
+            <div>loading...</div>
+          ) : (
+            data?.messages.map(
+              ({ id, message, createdAt, sender: { username } }) => (
+                <Message
+                  key={id}
+                  message={message}
+                  createdAt={createdAt}
+                  username={username}
+                />
+              )
+            )
+          )}
         </Box>
       </Box>
       <InputMessageField />
