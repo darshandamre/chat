@@ -6,6 +6,7 @@ import {
   Resolver,
   UseMiddleware
 } from "type-graphql";
+import { getConnection } from "typeorm";
 import { Chat } from "../entities/Chat";
 import { isAuth } from "../middleware/isAuth";
 import { MyContext } from "../types";
@@ -15,7 +16,22 @@ export class ChatResolver {
   // read
   @Query(() => [Chat])
   async messages(): Promise<Chat[]> {
-    return await Chat.find();
+    let chats = await getConnection()
+      .createQueryBuilder()
+      .select([
+        "c.id",
+        "c.message",
+        "c.createdAt",
+        "c.updatedAt",
+        "s.id",
+        "s.username"
+      ])
+      .from(Chat, "c")
+      .innerJoin("c.sender", "s")
+      .orderBy("c.id", "DESC")
+      .getMany();
+
+    return chats.reverse();
   }
 
   @Query(() => Chat, { nullable: true })
