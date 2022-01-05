@@ -64,7 +64,8 @@ const Login: React.FC = () => {
             if (response.data?.login.errors) {
               setErrors(toErrorMap(response.data.login.errors));
             } else if (response.data?.login.user) {
-              navigate("/");
+              setSubmitting(false);
+              return navigate("/");
             }
             setSubmitting(false);
           }}>
