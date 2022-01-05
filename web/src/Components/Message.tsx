@@ -1,6 +1,7 @@
 import React from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import { getTimestamp } from "../utils/getTimestamp";
+import { Box } from "@mui/material";
 
 interface MessageProps {
   message: string;
@@ -18,7 +19,7 @@ const Message: React.FC<MessageProps> = ({ message, createdAt, username }) => {
         <div>
           {username} <small>{getTimestamp(createdAt)}</small>
         </div>
-        <div>{message}</div>
+        <Box sx={{ whiteSpace: "pre-wrap" }}>{message}</Box>
       </div>
     </div>
   );

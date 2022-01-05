@@ -65,7 +65,7 @@ const InputMessageField: React.FC<InputMessageFieldProps> = () => {
 
           setSubmitting(false);
         }}>
-        {({ values, handleChange, isSubmitting, errors }) => (
+        {({ values, handleChange, isSubmitting, errors, submitForm }) => (
           <Form>
             <FormControl fullWidth variant="outlined" error={!!errors.message}>
               <FormHelperText>{errors.message}</FormHelperText>
@@ -76,6 +76,13 @@ const InputMessageField: React.FC<InputMessageFieldProps> = () => {
                 name="message"
                 value={values.message}
                 onChange={handleChange}
+                onKeyDown={e => {
+                  // submit on enter, don't submit on enter + shift
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    submitForm();
+                  }
+                }}
                 multiline
                 maxRows={5}
                 endAdornment={
