@@ -1,10 +1,15 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import PublicIcon from "@mui/icons-material/Public";
+import { useMessagesQuery } from "../generated/graphql";
+import { getTimestamp } from "../utils/getTimestamp";
 
 interface InboxProps {}
 
 const Inbox: React.FC<InboxProps> = () => {
+  const { data, loading } = useMessagesQuery();
+  const lastMessage = data?.messages.at(-1);
+  const timestamp = lastMessage ? getTimestamp(lastMessage.createdAt) : "";
   return (
     <Box
       sx={{
@@ -15,14 +20,22 @@ const Inbox: React.FC<InboxProps> = () => {
       }}>
       <Box sx={{ display: "flex" }}>
         <PublicIcon />
-        <Box>
-          <div>
-            Global chat <span>{"<time>"}</span>
-          </div>
-          <div>
-            sender: last message <span>4</span>
-          </div>
-        </Box>
+        {loading ? (
+          <Box>loading</Box>
+        ) : (
+          <Box>
+            <div>
+              Public channel{" "}
+              <small>
+                {timestamp.length > 10 ? timestamp.slice(-5) : timestamp}
+              </small>
+            </div>
+            <div>
+              {lastMessage?.sender.username}: {lastMessage?.message}{" "}
+              <small>4</small> {/* placeholder for no. of unread messages */}
+            </div>
+          </Box>
+        )}
       </Box>
     </Box>
   );
