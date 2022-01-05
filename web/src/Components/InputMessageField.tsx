@@ -54,13 +54,15 @@ const InputMessageField: React.FC<InputMessageFieldProps> = () => {
           setSubmitting(true);
 
           // make async call
-          try {
-            await sendMessage({ variables: { message } });
-          } catch (err: any) {
-            return setErrors({ message: err.message });
+          if (message.length > 0) {
+            try {
+              await sendMessage({ variables: { message } });
+            } catch (err: any) {
+              return setErrors({ message: err.message });
+            }
+            resetForm();
           }
 
-          resetForm();
           setSubmitting(false);
         }}>
         {({ values, handleChange, isSubmitting, errors }) => (
