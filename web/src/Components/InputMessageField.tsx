@@ -4,28 +4,69 @@ import {
   FormControl,
   OutlinedInput,
   InputAdornment,
-  IconButton
+  IconButton,
+  FormHelperText
 } from "@mui/material";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
+import {
+  MessagesDocument,
+  MessagesQuery,
+  useCreateMessageMutation,
+  useMeQuery
+} from "../generated/graphql";
 
 interface InputMessageFieldProps {}
 
 const InputMessageField: React.FC<InputMessageFieldProps> = () => {
+  const { data: meData } = useMeQuery();
+  const [sendMessage] = useCreateMessageMutation({
+    update: (cache, { data }) => {
+      cache.updateQuery<MessagesQuery, null>(
+        { query: MessagesDocument },
+        initialCache => {
+          return {
+            __typename: "Query",
+            messages: [
+              ...initialCache!.messages,
+              {
+                ...data!.createMessage,
+                sender: {
+                  __typename: "User",
+                  id: meData!.me!.id, //change id
+                  username: meData!.me!.username //change username
+                }
+              }
+            ]
+          };
+        }
+      );
+    }
+  });
+
   return (
     <>
       <Formik
         initialValues={{ message: "" }}
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={async (
+          { message },
+          { setSubmitting, resetForm, setErrors }
+        ) => {
           setSubmitting(true);
 
           // make async call
-          console.log(values);
+          try {
+            await sendMessage({ variables: { message } });
+          } catch (err: any) {
+            return setErrors({ message: err.message });
+          }
 
+          resetForm();
           setSubmitting(false);
         }}>
-        {({ values, handleChange, isSubmitting }) => (
+        {({ values, handleChange, isSubmitting, errors }) => (
           <Form>
-            <FormControl fullWidth variant="outlined">
+            <FormControl fullWidth variant="outlined" error={!!errors.message}>
+              <FormHelperText>{errors.message}</FormHelperText>
               <OutlinedInput
                 sx={{ px: 3 }}
                 id="outlined-adornment-input-message"
