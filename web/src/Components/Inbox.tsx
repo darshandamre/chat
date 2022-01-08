@@ -1,6 +1,6 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import PublicIcon from "@mui/icons-material/Public";
+// import PublicIcon from "@mui/icons-material/Public";
 import { useMessagesQuery } from "../generated/graphql";
 import { getTimestamp } from "../utils/getTimestamp";
 
@@ -19,7 +19,7 @@ const Inbox: React.FC<InboxProps> = () => {
         borderColor: "grey.800"
       }}>
       <Box sx={{ display: "flex" }}>
-        <PublicIcon />
+        {/* <PublicIcon /> */}
         {loading ? (
           <Box>loading</Box>
         ) : (
